@@ -23,7 +23,7 @@ class PDFEmbed
      */
     static public function onParserFirstCallInit(Parser $parser)
     {
-        $parser->setHook('pdf', [new static(), 'generateTag']);
+        $parser->setHook('pdf', [self::class, 'generateTag']);
 
         return true;
     }
