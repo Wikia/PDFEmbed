@@ -1,3 +1,9 @@
+#v3.0.0
+* Class PDFHandler removed.
+* Deprecated usage of User::newFromName() replaced by MediaWikiServices usage.
+* Deprecated usage of wfFindFile() replaced by MediaWikiServices usage.
+* Deprecated usage of disableCache() removed.
+
 #v2.0.2
 * Updated extension.json to support MediaWiki 1.30+.
 
