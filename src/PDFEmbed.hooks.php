@@ -38,7 +38,7 @@ class PDFEmbed
      * @param object    PPFrame object.
      * @return    string    HTML
      */
-    static public function generateTag($file, $args = [], Parser $parser, PPFrame $frame)
+    static public function generateTag($file, $args, Parser $parser, PPFrame $frame)
     {
         $request = RequestContext::getMain()->getRequest();
 
