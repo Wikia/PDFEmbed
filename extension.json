@@ -26,10 +26,13 @@
     "PDFEmbed": "src/PDFEmbed.hooks.php"
   },
   "HookHandlers": {
-	  "main": {
-		  "class": "PDFEmbed",
-		  "services": ["MainConfig", "RepoGroup"]
-	  }
+    "main": {
+      "class": "PDFEmbed",
+      "services": [
+        "MainConfig",
+        "RepoGroup"
+      ]
+    }
   },
   "Hooks": {
     "ParserFirstCallInit": "main"
@@ -40,9 +43,9 @@
   "config": {
     "PdfEmbed": {
       "value": {
-		  "width": 800,
-		  "height": 1090
-	  }
+        "width": 800,
+        "height": 1090
+      }
     }
   },
   "manifest_version": 2
