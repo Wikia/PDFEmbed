@@ -9,21 +9,25 @@
  * @link        http://www.mediawiki.org/wiki/Extension:PDFEmbed
  *
  */
-
+use MediaWiki\Config\Config;
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Hook\ParserFirstCallInitHook;
+use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Parser\Parser;
+use MediaWiki\Title\Title;
 
 class PDFEmbed implements ParserFirstCallInitHook {
-	public function __construct( private Config $config, private RepoGroup $repoGroup ) {
+	public function __construct( private readonly Config $config, private readonly RepoGroup $repoGroup ) {
 	}
 
 	/**
 	 * Sets up this extension's parser functions.
 	 *
-	 * @param object    Parser object passed as a reference.
+	 * @param object $parser Parser object passed as a reference.
 	 * @return bool true
 	 */
-	public function onParserFirstCallInit( $parser ) {
+	public function onParserFirstCallInit( $parser ): bool {
 		$parser->setHook( 'pdf', [ $this, 'generateTag' ] );
 
 		return true;
@@ -32,13 +36,13 @@ class PDFEmbed implements ParserFirstCallInitHook {
 	/**
 	 * Generates the PDF object tag.
 	 *
-	 * @param string    Namespace prefixed article of the PDF file to display.
-	 * @param array    Arguments on the tag.
-	 * @param object    Parser object.
-	 * @param object    PPFrame object.
+	 * @param string $file Namespace prefixed article of the PDF file to display.
+	 * @param array $args Arguments on the tag.
+	 * @param Parser $parser Parser object.
+	 * @param PPFrame $frame PPFrame object.
 	 * @return string HTML
 	 */
-	public function generateTag( $file, $args, Parser $parser, PPFrame $frame ) {
+	public function generateTag( string $file, array $args, Parser $parser, PPFrame $frame ): string {
 		$request = RequestContext::getMain()->getRequest();
 		$wgPdfEmbed = $this->config->get( 'PdfEmbed' );
 
@@ -94,23 +98,24 @@ class PDFEmbed implements ParserFirstCallInitHook {
 	 * Returns a standard error message.
 	 *
 	 * @private
-	 * @param string    Error message key to display.
+	 * @param string $messageKey Error message key to display.
 	 * @return string HTML error message.
 	 */
-	private static function error( $messageKey ) {
-		return Xml::span( wfMessage( $messageKey )->plain(), 'error' );
+	private static function error( string $messageKey ): string {
+		return Html::element( 'span', [ 'class' => 'error' ], wfMessage( $messageKey )->plain() );
 	}
 
 	/**
 	 * Returns a HTML object as string.
 	 *
 	 * @private
-	 * @param object    File object.
-	 * @param integer    Width of the object.
-	 * @param integer    Height of the object.
+	 * @param File $file File object.
+	 * @param integer $width Width of the object.
+	 * @param integer $height Height of the object.
+	 * @param int $page
 	 * @return string HTML object.
 	 */
-	private static function embed( File $file, $width, $height, $page ) {
+	private static function embed( File $file, int $width, int $height, int $page ): string {
 		return Html::rawElement(
 			'iframe',
 			[
